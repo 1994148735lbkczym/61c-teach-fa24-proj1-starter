@@ -24,12 +24,40 @@ static void update_head(game_state_t *state, unsigned int snum);
 /* Task 1 */
 game_state_t *create_default_state() {
   // TODO: Implement this function.
-  return NULL;
+  game_state_t *init_state_t = malloc(sizeof(game_state_t));
+  init_state_t->num_rows = 18;
+  //创建板
+  unsigned int col = 21;
+  init_state_t->board = malloc(sizeof(char*) * init_state_t->num_rows);
+  for(int row = 0; row < init_state_t->num_rows; row++){
+    init_state_t->board[row] = malloc(col * sizeof(char));
+    if(row == 0 || row == 17){
+      strcpy(init_state_t->board[row], "####################");
+    }
+    else{
+      strcpy(init_state_t->board[row], "#                  #");
+    }
+  }
+  //创建蛇和水果
+  strcpy(init_state_t->board[2], "# d>D    *         #");
+  init_state_t->num_snakes = 1;
+  init_state_t->snakes = malloc(sizeof(snake_t) * init_state_t->num_snakes);
+  init_state_t->snakes[0] = (snake_t){.tail_row = 2, .tail_col = 2, .head_row = 2, .head_col = 4, .live = true};
+  return init_state_t;
 }
 
 /* Task 2 */
 void free_state(game_state_t *state) {
   // TODO: Implement this function.
+  //释放板
+  for(int row = 0; row < state->num_rows; row++){
+    free(state->board[row]);
+  }
+  free(state->board);
+  //释放蛇
+  free(state->snakes);
+  //释放state
+  free(state);
   return;
 }
 
